@@ -11,7 +11,7 @@ package gest_bibliotheque;
 public class Enregistrement_emprunts extends javax.swing.JFrame {
 
     /**
-     * Creates new form Enregistrement_emprunts
+     * Creates new form Enregistrement_emprunts      
      */
     public Enregistrement_emprunts() {
         initComponents();
