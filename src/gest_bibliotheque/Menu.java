@@ -32,51 +32,16 @@ public class Menu extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton4 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        btnGest_livre = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        btn_Rapport = new javax.swing.JButton();
+        btn_Livres = new javax.swing.JButton();
+        btn_Categorie = new javax.swing.JButton();
+        btn_Quitter = new javax.swing.JButton();
+        btn_Emprunt = new javax.swing.JButton();
 
         jButton4.setText("jButton1");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Système de Gestion d'une bilbliothèque");
-
-        jPanel1.setLayout(null);
-
-        jLabel1.setFont(new java.awt.Font("Algerian", 0, 36)); // NOI18N
-        jLabel1.setText("SYSTEME DE GESTION D'UNE BIBLIOTHEQUE");
-
-        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton5.setText("Rapports");
-        jButton5.setActionCommand("Historique des Emprunts");
-        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
-        btnGest_livre.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnGest_livre.setText("Gestion des livres");
-        btnGest_livre.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGest_livre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGest_livreActionPerformed(evt);
-            }
-        });
-
-        jButton7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton7.setText("Gestion des Emprunts");
-        jButton7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
 
         jButton8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton8.setText("Historique des Emprunts");
@@ -87,18 +52,63 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        jButton9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton9.setText("Quitter");
-        jButton9.setActionCommand("Historique des Emprunts");
-        jButton9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton9MouseClicked(evt);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Système de Gestion d'une bilbliothèque");
+
+        jPanel1.setLayout(null);
+
+        jLabel1.setFont(new java.awt.Font("Algerian", 0, 36)); // NOI18N
+        jLabel1.setText("SYSTEME DE GESTION D'UNE BIBLIOTHEQUE");
+
+        btn_Rapport.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_Rapport.setText("Rapports");
+        btn_Rapport.setActionCommand("Historique des Emprunts");
+        btn_Rapport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Rapport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_RapportActionPerformed(evt);
             }
         });
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
+
+        btn_Livres.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_Livres.setText("Gestion des livres");
+        btn_Livres.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Livres.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
+                btn_LivresActionPerformed(evt);
+            }
+        });
+
+        btn_Categorie.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_Categorie.setText("Gestion des Catégories");
+        btn_Categorie.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Categorie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_CategorieActionPerformed(evt);
+            }
+        });
+
+        btn_Quitter.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_Quitter.setText("Quitter");
+        btn_Quitter.setActionCommand("Historique des Emprunts");
+        btn_Quitter.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Quitter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_QuitterMouseClicked(evt);
+            }
+        });
+        btn_Quitter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_QuitterActionPerformed(evt);
+            }
+        });
+
+        btn_Emprunt.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_Emprunt.setText("Gestion des Emprunts");
+        btn_Emprunt.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Emprunt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_EmpruntActionPerformed(evt);
             }
         });
 
@@ -107,75 +117,84 @@ public class Menu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(btnGest_livre, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addComponent(jButton7)
-                .addGap(57, 57, 57)
-                .addComponent(jButton8)
-                .addGap(68, 68, 68)
-                .addComponent(jButton5)
-                .addGap(54, 54, 54)
-                .addComponent(jButton9)
-                .addGap(47, 47, 47))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 737, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(241, 241, 241))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(195, 195, 195)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 737, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(btn_Livres, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btn_Emprunt)
+                        .addGap(40, 40, 40)
+                        .addComponent(btn_Categorie, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btn_Rapport, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addComponent(btn_Quitter)))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGest_livre, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(111, 111, 111))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 163, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_Emprunt, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Categorie, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Livres, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Rapport, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Quitter, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(122, 122, 122))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btn_RapportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RapportActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btn_RapportActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    private void btn_CategorieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CategorieActionPerformed
+          Menu.super.dispose();
+        gestion_categories categorie = new gestion_categories();
+        categorie.setVisible(true);
+    }//GEN-LAST:event_btn_CategorieActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+    private void btn_QuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_QuitterActionPerformed
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }//GEN-LAST:event_btn_QuitterActionPerformed
 
-    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
+    private void btn_QuitterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_QuitterMouseClicked
         // TODO add your handling code here:
         int option = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment quitter ?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
-    }//GEN-LAST:event_jButton9MouseClicked
+    }//GEN-LAST:event_btn_QuitterMouseClicked
 
-    private void btnGest_livreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGest_livreActionPerformed
+    private void btn_LivresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LivresActionPerformed
         // TODO add your handling code here:
         Menu.super.dispose();
         gestion_livre livre = new gestion_livre();
         livre.setVisible(true);
-    }//GEN-LAST:event_btnGest_livreActionPerformed
+    }//GEN-LAST:event_btn_LivresActionPerformed
+
+    private void btn_EmpruntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EmpruntActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_EmpruntActionPerformed
 
     /**
      * @param args the command line arguments
@@ -213,12 +232,13 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGest_livre;
+    private javax.swing.JButton btn_Categorie;
+    private javax.swing.JButton btn_Emprunt;
+    private javax.swing.JButton btn_Livres;
+    private javax.swing.JButton btn_Quitter;
+    private javax.swing.JButton btn_Rapport;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables

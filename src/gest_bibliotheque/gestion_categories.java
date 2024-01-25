@@ -20,7 +20,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class gestion_categories extends javax.swing.JFrame {
 
-
     PreparedStatement pst = null;
 
     /**
@@ -29,7 +28,10 @@ public class gestion_categories extends javax.swing.JFrame {
     public gestion_categories() {
         initComponents();
         show_table();
+        this.setLocationRelativeTo(null);
     }
+
+  
 
     private void show_table() {
         int CC;
@@ -76,9 +78,10 @@ public class gestion_categories extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         btnEnregistrer = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btn_Supprimer = new javax.swing.JButton();
+        btn_Retour = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jPanel1.setLayout(null);
 
@@ -137,7 +140,9 @@ public class gestion_categories extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(370, 100, 290, 200);
 
+        btnEnregistrer.setBackground(new java.awt.Color(0, 204, 0));
         btnEnregistrer.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        btnEnregistrer.setForeground(new java.awt.Color(255, 255, 255));
         btnEnregistrer.setText("Enregistrer");
         btnEnregistrer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,17 +150,29 @@ public class gestion_categories extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnEnregistrer);
-        btnEnregistrer.setBounds(100, 270, 110, 30);
+        btnEnregistrer.setBounds(30, 260, 110, 30);
 
-        jButton2.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        jButton2.setText("Supprimer");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btn_Supprimer.setBackground(new java.awt.Color(255, 0, 0));
+        btn_Supprimer.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        btn_Supprimer.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Supprimer.setText("Supprimer");
+        btn_Supprimer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btn_SupprimerActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2);
-        jButton2.setBounds(250, 270, 110, 30);
+        jPanel1.add(btn_Supprimer);
+        btn_Supprimer.setBounds(150, 260, 110, 30);
+
+        btn_Retour.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        btn_Retour.setText("Retour");
+        btn_Retour.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_RetourActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btn_Retour);
+        btn_Retour.setBounds(270, 260, 80, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -171,29 +188,33 @@ public class gestion_categories extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            // TODO add your handling code here:
+    private void btn_SupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SupprimerActionPerformed
+        int option = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer ?", "Confirmation de Suppression", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+            try {
+                // TODO add your handling code here:
 
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            int selectedIndex = jTable1.getSelectedRow();
-            String id = model.getValueAt(selectedIndex, 0).toString();
-            Connexion con = new Connexion();
-            pst = con.con.prepareStatement("Delete from categorie where nom = ?");
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                int selectedIndex = jTable1.getSelectedRow();
+                String id = model.getValueAt(selectedIndex, 0).toString();
+                Connexion con = new Connexion();
+                pst = con.con.prepareStatement("Delete from categorie where nom = ?");
 
-            pst.setString(1, id);
+                pst.setString(1, id);
 
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Enregistrement Supprimé");
-            show_table();
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Catégorie Supprimé");
+                show_table();
 
-            txtNom.setText("");
-            txtDescription.setText("");
-            cboRangee.setSelectedItem("");
-        } catch (SQLException ex) {
-            Logger.getLogger(gestion_categories.class.getName()).log(Level.SEVERE, null, ex);
+                txtNom.setText("");
+                txtDescription.setText("");
+                cboRangee.setSelectedItem("");
+            } catch (SQLException ex) {
+                Logger.getLogger(gestion_categories.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+
+    }//GEN-LAST:event_btn_SupprimerActionPerformed
 
     private void btnEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnregistrerActionPerformed
         String nom, description, rangee;
@@ -232,6 +253,12 @@ public class gestion_categories extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_btnEnregistrerActionPerformed
+
+    private void btn_RetourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RetourActionPerformed
+        gestion_categories.super.dispose();
+        Menu menu = new Menu();
+        menu.setVisible(true);
+    }//GEN-LAST:event_btn_RetourActionPerformed
 
     /**
      * @param args the command line arguments
@@ -278,8 +305,9 @@ public class gestion_categories extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnregistrer;
+    private javax.swing.JButton btn_Retour;
+    private javax.swing.JButton btn_Supprimer;
     private javax.swing.JComboBox<String> cboRangee;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

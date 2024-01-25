@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,6 +32,25 @@ public class gestion_livre extends javax.swing.JFrame {
         this.setSize(750, 500);
         initComponents();
         show_table();
+        show_models() ;
+    }
+      private void show_models() {
+
+        try {
+            Connexion con = new Connexion();
+            pst = con.con.prepareStatement("SELECT nom FROM categorie");
+            ResultSet Rs = pst.executeQuery();
+            Vector<String> categories = new Vector<>();
+            while (Rs.next()) {
+                String categoryName = Rs.getString("nom");
+                categories.add(categoryName);
+                
+            }
+             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(categories);
+             comboCategorie.setModel(model);
+        } catch (SQLException ex) {
+            Logger.getLogger(gestion_categories.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void show_table() {
@@ -49,9 +69,10 @@ public class gestion_livre extends javax.swing.JFrame {
                 for (int i = 1; i <= CC; i++) {
                     v2.add(Rs.getString("nom"));
                     v2.add(Rs.getString("description"));
+                      v2.add(Rs.getString("quantite"));
                     v2.add(Rs.getString("auteur"));
                     v2.add(Rs.getString("annee"));
-                    v2.add(Rs.getString("quantite"));
+                  
                 }
                 DFT.addRow(v2);
             }
@@ -90,7 +111,7 @@ public class gestion_livre extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 255));
         jPanel1.setLayout(null);
@@ -189,7 +210,6 @@ public class gestion_livre extends javax.swing.JFrame {
         btnSupprimer.setBounds(490, 280, 140, 40);
 
         comboCategorie.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
-        comboCategorie.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(comboCategorie);
         comboCategorie.setBounds(520, 100, 260, 40);
 
@@ -223,17 +243,17 @@ public class gestion_livre extends javax.swing.JFrame {
         jTable1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nom", "Description", "Quantité", "Catégories", "Auteur", "Année"
+                "Nom", "Description", "Quantité", "Auteur", "Année"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
