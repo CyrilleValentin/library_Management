@@ -331,10 +331,9 @@ public class gestion_livre extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Veuillez entrer votre age");
         } else if (annee.equals("")) {
             JOptionPane.showMessageDialog(null, "Veuillez entrer votre adresse");
-        }
-        else if (quantite.equals("")) {
+        } else if (quantite.equals("")) {
             JOptionPane.showMessageDialog(null, "Veuillez entrer votre adresse");
-        }else {
+        } else {
 
             try {
                 Connexion con = new Connexion();
@@ -342,19 +341,21 @@ public class gestion_livre extends javax.swing.JFrame {
 
                 pst.setString(1, nom);
                 pst.setString(2, description);
-                pst.setString(3, age);
-                pst.setString(4, adresse);
+                pst.setString(3, auteur);
+                pst.setString(4, annee);
+                pst.setString(5, quantite);
 
                 pst.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Data Inserted Successfully");
+                JOptionPane.showMessageDialog(null, "Livre ajouté avec succès");
 
                 show_table();
-                txtNom.setText("");
-                txtPrenoms.setText("");
-                txtAge.setText("");
-                txtAdresse.setText("");
+                txtName.setText("");
+                txtDescription.setText("");
+                txtAuteur.setText("");
+                txtAnnee.setText("");
+                txtQuantite.setText("");
             } catch (SQLException ex) {
-                Logger.getLogger(Personnel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(gestion_livre.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }

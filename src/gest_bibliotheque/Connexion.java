@@ -17,7 +17,7 @@ public class Connexion {
     public Connexion(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/bibliotheque","root","");
+            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/gest_librairie","root","");
            // JOptionPane.showMessageDialog(null, "connexion reussie");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "echec de connexion"+e);
