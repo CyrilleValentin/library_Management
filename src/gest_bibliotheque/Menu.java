@@ -16,10 +16,11 @@ public class Menu extends javax.swing.JFrame {
      * Creates new form Menu
      */
     public Menu() {
+        this.setVisible(true);
         this.setResizable(false);
         this.setSize(600, 300);
         initComponents();
-          this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
     }
 
     /**

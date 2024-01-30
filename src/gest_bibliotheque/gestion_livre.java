@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -27,14 +28,15 @@ public class gestion_livre extends javax.swing.JFrame {
      * Creates new form Enregistrement_livre
      */
     public gestion_livre() {
-        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setSize(750, 500);
         initComponents();
+        this.setLocationRelativeTo(null);
         show_table();
-        show_models() ;
+        show_models();
     }
-      private void show_models() {
+
+    private void show_models() {
 
         try {
             Connexion con = new Connexion();
@@ -44,10 +46,10 @@ public class gestion_livre extends javax.swing.JFrame {
             while (Rs.next()) {
                 String categoryName = Rs.getString("nom");
                 categories.add(categoryName);
-                
+
             }
-             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(categories);
-             comboCategorie.setModel(model);
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(categories);
+            comboCategorie.setModel(model);
         } catch (SQLException ex) {
             Logger.getLogger(gestion_categories.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,10 +71,10 @@ public class gestion_livre extends javax.swing.JFrame {
                 for (int i = 1; i <= CC; i++) {
                     v2.add(Rs.getString("nom"));
                     v2.add(Rs.getString("description"));
-                      v2.add(Rs.getString("quantite"));
+                    v2.add(Rs.getString("quantite"));
                     v2.add(Rs.getString("auteur"));
                     v2.add(Rs.getString("annee"));
-                  
+
                 }
                 DFT.addRow(v2);
             }
@@ -110,10 +112,13 @@ public class gestion_livre extends javax.swing.JFrame {
         btnRetour = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jTextField1 = new javax.swing.JTextField();
+        btnRechercher = new javax.swing.JButton();
+        combo_Rechercher = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Algerian", 1, 36)); // NOI18N
@@ -207,7 +212,7 @@ public class gestion_livre extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSupprimer);
-        btnSupprimer.setBounds(490, 280, 140, 40);
+        btnSupprimer.setBounds(480, 280, 150, 40);
 
         comboCategorie.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
         jPanel1.add(comboCategorie);
@@ -215,13 +220,19 @@ public class gestion_livre extends javax.swing.JFrame {
 
         btnModifier.setFont(new java.awt.Font("Calibri Light", 1, 24)); // NOI18N
         btnModifier.setText("Modifier");
+        btnModifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifierActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnModifier);
-        btnModifier.setBounds(330, 280, 120, 40);
+        btnModifier.setBounds(320, 280, 130, 40);
 
         btnEnregistrer.setBackground(new java.awt.Color(51, 204, 0));
         btnEnregistrer.setFont(new java.awt.Font("Calibri Light", 1, 24)); // NOI18N
         btnEnregistrer.setForeground(new java.awt.Color(255, 255, 255));
         btnEnregistrer.setText("Enregistrer");
+        btnEnregistrer.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnEnregistrer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEnregistrerActionPerformed(evt);
@@ -260,10 +271,36 @@ public class gestion_livre extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(20, 350, 840, 250);
+        jScrollPane1.setBounds(20, 390, 840, 210);
+
+        jTextField1.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jTextField1);
+        jTextField1.setBounds(420, 340, 220, 40);
+
+        btnRechercher.setBackground(new java.awt.Color(51, 51, 255));
+        btnRechercher.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        btnRechercher.setForeground(new java.awt.Color(255, 255, 255));
+        btnRechercher.setText("Rechercher");
+        jPanel1.add(btnRechercher);
+        btnRechercher.setBounds(660, 340, 120, 40);
+
+        combo_Rechercher.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        combo_Rechercher.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "nom", "auteur", "annee" }));
+        jPanel1.add(combo_Rechercher);
+        combo_Rechercher.setBounds(140, 340, 260, 40);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -309,29 +346,32 @@ public class gestion_livre extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRetourActionPerformed
 
     private void btnSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSupprimerActionPerformed
-        try {
-            // TODO add your handling code here:
+        int option = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer ?", "Confirmation de Suppression", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+            try {
+                // TODO add your handling code here:
 
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            int selectedIndex = jTable1.getSelectedRow();
-            String id = model.getValueAt(selectedIndex, 0).toString();
-            Connexion con = new Connexion();
-            pst = con.con.prepareStatement("Delete from livres where nom = ?");
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                int selectedIndex = jTable1.getSelectedRow();
+                String id = model.getValueAt(selectedIndex, 0).toString();
+                Connexion con = new Connexion();
+                pst = con.con.prepareStatement("Delete from livres where nom = ?");
 
-            pst.setString(1, id);
+                pst.setString(1, id);
 
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Enregistrement Supprimé");
-            show_table();
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Enregistrement Supprimé");
+                show_table();
 
-            txtName.setText("");
-            txtDescription.setText("");
-            txtAuteur.setText("");
-            txtAnnee.setText("");
-            txtQuantite.setText("");
+                txtName.setText("");
+                txtDescription.setText("");
+                txtAuteur.setText("");
+                txtAnnee.setText("");
+                txtQuantite.setText("");
 
-        } catch (SQLException ex) {
-            Logger.getLogger(gestion_livre.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(gestion_livre.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }        // TODO add your handling code here:
     }//GEN-LAST:event_btnSupprimerActionPerformed
 
@@ -352,7 +392,7 @@ public class gestion_livre extends javax.swing.JFrame {
         } else if (annee.equals("")) {
             JOptionPane.showMessageDialog(null, "Veuillez entrer votre adresse");
         } else if (quantite.equals("")) {
-            JOptionPane.showMessageDialog(null, "Veuillez entrer votre adresse");
+            JOptionPane.showMessageDialog(null, "Veuillez entrer votre quantité");
         } else {
 
             try {
@@ -380,6 +420,75 @@ public class gestion_livre extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btnEnregistrerActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int selectedIndex = jTable1.getSelectedRow();
+        txtName.setText(model.getValueAt(selectedIndex, 0).toString());
+        txtDescription.setText(model.getValueAt(selectedIndex, 1).toString());
+        txtAuteur.setText(model.getValueAt(selectedIndex, 3).toString());
+        txtAnnee.setText(model.getValueAt(selectedIndex, 4).toString());
+        txtQuantite.setText(model.getValueAt(selectedIndex, 2).toString());
+        comboCategorie.setModel((ComboBoxModel<String>) model.getValueAt(selectedIndex, 5));
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
+        String nom, description, auteur, annee, quantite;
+
+        nom = txtName.getText();
+        description = txtDescription.getText();
+        auteur = txtAuteur.getText();
+        annee = txtAnnee.getText();
+        quantite = txtQuantite.getText();
+        if (nom.equals("")) {
+            JOptionPane.showMessageDialog(null, "Veuillez entrer votre nom");
+        } else if (description.equals("")) {
+            JOptionPane.showMessageDialog(null, "Veuillez entrer votre prénoms");
+        } else if (auteur.equals("")) {
+            JOptionPane.showMessageDialog(null, "Veuillez entrer votre age");
+        } else if (annee.equals("")) {
+            JOptionPane.showMessageDialog(null, "Veuillez entrer votre adresse");
+        } else if (quantite.equals("")) {
+            JOptionPane.showMessageDialog(null, "Veuillez entrer votre quantité");
+        } else {
+            try {
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                int selectedIndex = jTable1.getSelectedRow();
+                txtName.setText(model.getValueAt(selectedIndex, 0).toString());
+                String noms=txtName.getText();
+               // int id = Integer.parseInt(model.getValueAt(selectedIndex, 0).toString());
+                 Connexion con = new Connexion();
+
+                pst = con.con.prepareStatement("update livres set nom =?, description=?, auteur =?, annee =?, quantite = ? where noms =?");
+
+               pst.setString(1, nom);
+                pst.setString(2, description);
+                pst.setString(3, auteur);
+                pst.setString(4, annee);
+                pst.setString(5, quantite);
+                pst.setString(6, noms);
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Livre modifié avec succès");
+
+                show_table();
+                txtName.setText("");
+                txtDescription.setText("");
+                txtAuteur.setText("");
+                txtAnnee.setText("");
+                txtQuantite.setText("");
+
+            } catch (SQLException ex) {
+                Logger.getLogger(gestion_livre.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnModifierActionPerformed
 
     /**
      * @param args the command line arguments
@@ -420,9 +529,11 @@ public class gestion_livre extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnregistrer;
     private javax.swing.JButton btnModifier;
+    private javax.swing.JButton btnRechercher;
     private javax.swing.JButton btnRetour;
     private javax.swing.JButton btnSupprimer;
     private javax.swing.JComboBox<String> comboCategorie;
+    private javax.swing.JComboBox<String> combo_Rechercher;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel4;
@@ -433,6 +544,7 @@ public class gestion_livre extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField txtAnnee;
     private javax.swing.JTextField txtAuteur;
     private javax.swing.JTextField txtDescription;

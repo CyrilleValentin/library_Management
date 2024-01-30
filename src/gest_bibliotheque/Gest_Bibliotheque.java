@@ -15,6 +15,7 @@ public class Gest_Bibliotheque {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Menu main = new Menu();
     }
     
 }

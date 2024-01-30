@@ -138,7 +138,7 @@ public class gestion_categories extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(370, 100, 290, 200);
+        jScrollPane1.setBounds(370, 100, 290, 190);
 
         btnEnregistrer.setBackground(new java.awt.Color(0, 204, 0));
         btnEnregistrer.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -182,7 +182,7 @@ public class gestion_categories extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -240,7 +240,7 @@ public class gestion_categories extends javax.swing.JFrame {
                 pst.setString(3, rangee);
 
                 pst.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Livre ajouté avec succès");
+                JOptionPane.showMessageDialog(null, "Catégorie ajouté avec succès");
 
                 show_table();
                 txtNom.setText("");
