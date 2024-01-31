@@ -68,7 +68,8 @@ public class gestion_livre extends javax.swing.JFrame {
             DFT.setRowCount(0);
             while (Rs.next()) {
                 Vector v2 = new Vector();
-                for (int i = 1; i <= CC; i++) {
+                for (int i = 0; i <= CC; i++) {
+                    v2.add(Rs.getString("id_livre"));
                     v2.add(Rs.getString("nom"));
                     v2.add(Rs.getString("description"));
                     v2.add(Rs.getString("quantite"));
@@ -254,21 +255,28 @@ public class gestion_livre extends javax.swing.JFrame {
         jTable1.setFont(new java.awt.Font("Calibri Light", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Nom", "Description", "Quantité", "Auteur", "Année"
+                "id", "Nom", "Description", "Quantité", "Auteur", "Année"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -277,6 +285,15 @@ public class gestion_livre extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(3);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+            jTable1.getColumnModel().getColumn(4).setResizable(false);
+            jTable1.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(20, 390, 840, 210);
@@ -353,11 +370,11 @@ public class gestion_livre extends javax.swing.JFrame {
 
                 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 int selectedIndex = jTable1.getSelectedRow();
-                String id = model.getValueAt(selectedIndex, 0).toString();
+                int id = Integer.parseInt(model.getValueAt(selectedIndex, 0).toString());
                 Connexion con = new Connexion();
-                pst = con.con.prepareStatement("Delete from livres where nom = ?");
+                pst = con.con.prepareStatement("Delete from livres where id_livre = ?");
 
-                pst.setString(1, id);
+                pst.setInt(1, id);
 
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Enregistrement Supprimé");
@@ -393,17 +410,26 @@ public class gestion_livre extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Veuillez entrer votre adresse");
         } else if (quantite.equals("")) {
             JOptionPane.showMessageDialog(null, "Veuillez entrer votre quantité");
+        } else if (comboCategorie.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "Veuillez sélectionner une catégorie");
         } else {
+            String categorieNom = comboCategorie.getSelectedItem().toString();
+            int idCategorie = getIdCategorie(categorieNom);
 
+            if (idCategorie == -1) {
+                JOptionPane.showMessageDialog(null, "La catégorie sélectionnée n'existe pas");
+                return;
+            }
             try {
                 Connexion con = new Connexion();
-                pst = con.con.prepareStatement("insert into livres (nom, description, auteur, annee, quantite)values(?,?,?,?,?)");
+                pst = con.con.prepareStatement("insert into livres (nom, description, auteur, annee, quantite, id_categorie) values (?, ?, ?, ?, ?, ?)");
 
                 pst.setString(1, nom);
                 pst.setString(2, description);
                 pst.setString(3, auteur);
                 pst.setString(4, annee);
                 pst.setString(5, quantite);
+                pst.setInt(6, idCategorie); // Insérer l'ID de la catégorie
 
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Livre ajouté avec succès");
@@ -417,10 +443,26 @@ public class gestion_livre extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(gestion_livre.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }//GEN-LAST:event_btnEnregistrerActionPerformed
 
+    private int getIdCategorie(String nomCategorie) {
+        int idCategorie = -1; // Initialiser à -1 pour indiquer que la catégorie n'a pas été trouvée
+        try {
+            Connexion con = new Connexion();
+            PreparedStatement pstmt = con.con.prepareStatement("SELECT id_categorie FROM categorie WHERE nom = ?");
+            pstmt.setString(1, nomCategorie);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                idCategorie = rs.getInt("id_categorie");
+            }
+            rs.close();
+            pstmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(gestion_livre.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return idCategorie;
+    }
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
@@ -430,12 +472,12 @@ public class gestion_livre extends javax.swing.JFrame {
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int selectedIndex = jTable1.getSelectedRow();
-        txtName.setText(model.getValueAt(selectedIndex, 0).toString());
-        txtDescription.setText(model.getValueAt(selectedIndex, 1).toString());
-        txtAuteur.setText(model.getValueAt(selectedIndex, 3).toString());
-        txtAnnee.setText(model.getValueAt(selectedIndex, 4).toString());
-        txtQuantite.setText(model.getValueAt(selectedIndex, 2).toString());
-        comboCategorie.setModel((ComboBoxModel<String>) model.getValueAt(selectedIndex, 5));
+        txtName.setText(model.getValueAt(selectedIndex, 1).toString());
+        txtDescription.setText(model.getValueAt(selectedIndex, 2).toString());
+        txtAuteur.setText(model.getValueAt(selectedIndex, 4).toString());
+        txtAnnee.setText(model.getValueAt(selectedIndex, 5).toString());
+        txtQuantite.setText(model.getValueAt(selectedIndex, 3).toString());
+        comboCategorie.setModel((ComboBoxModel<String>) model.getValueAt(selectedIndex, 6));
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
@@ -461,18 +503,18 @@ public class gestion_livre extends javax.swing.JFrame {
                 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 int selectedIndex = jTable1.getSelectedRow();
                 txtName.setText(model.getValueAt(selectedIndex, 0).toString());
-                String noms=txtName.getText();
-               // int id = Integer.parseInt(model.getValueAt(selectedIndex, 0).toString());
-                 Connexion con = new Connexion();
 
-                pst = con.con.prepareStatement("update livres set nom =?, description=?, auteur =?, annee =?, quantite = ? where noms =?");
+                int id = Integer.parseInt(model.getValueAt(selectedIndex, 0).toString());
+                Connexion con = new Connexion();
 
-               pst.setString(1, nom);
+                pst = con.con.prepareStatement("update livres set nom =?, description=?, auteur =?, annee =?, quantite = ? where id_livre =?");
+
+                pst.setString(1, nom);
                 pst.setString(2, description);
                 pst.setString(3, auteur);
                 pst.setString(4, annee);
                 pst.setString(5, quantite);
-                pst.setString(6, noms);
+                pst.setInt(6, id);
 
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Livre modifié avec succès");
