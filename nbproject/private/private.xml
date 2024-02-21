@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Cyrille/Documents/NetBeansProjects/Gest_Bibliotheque/src/gest_bibliotheque/Gest_Bibliotheque.java</file>
-            <file>file:/C:/Users/Cyrille/Documents/NetBeansProjects/Gest_Bibliotheque/src/gest_bibliotheque/Connexion.java</file>
+            <file>file:/C:/Users/Cyrille/Documents/NetBeansProjects/Gest_Bibliotheque/src/gest_bibliotheque/gest.java</file>
             <file>file:/C:/Users/Cyrille/Documents/NetBeansProjects/Gest_Bibliotheque/src/gest_bibliotheque/Rechercher_livres.java</file>
-            <file>file:/C:/Users/Cyrille/Documents/NetBeansProjects/Gest_Bibliotheque/src/gest_bibliotheque/gestion_livre.java</file>
-            <file>file:/C:/Users/Cyrille/Documents/NetBeansProjects/Gest_Bibliotheque/src/gest_bibliotheque/gestion_categories.java</file>
-            <file>file:/C:/Users/Cyrille/Documents/NetBeansProjects/Gest_Bibliotheque/src/gest_bibliotheque/Menu.java</file>
+            <file>file:/C:/Users/Cyrille/Documents/NetBeansProjects/Gest_Bibliotheque/src/gest_bibliotheque/Dash.java</file>
         </group>
     </open-files>
 </project-private>
