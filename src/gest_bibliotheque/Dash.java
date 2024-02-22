@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -39,7 +40,39 @@ public class Dash extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         showlivres();
         showlivresEm();
+        showHistoriqueEmp();
 
+    }
+
+    private void showHistoriqueEmp() {
+        int CC;
+
+        try {
+            Connexion con = new Connexion();
+            pst = con.con.prepareStatement("SELECT *FROM emprunts where etat=false");
+            ResultSet Rs = pst.executeQuery();
+            ResultSetMetaData RSMD = Rs.getMetaData();
+            CC = RSMD.getColumnCount();
+            DefaultTableModel DFT = (DefaultTableModel) jTable4.getModel();
+            DFT.setRowCount(0);
+            while (Rs.next()) {
+                Vector v2 = new Vector();
+                for (int i = 0; i <= CC; i++) {
+                    v2.add(Rs.getString("id_emprunt"));
+                    v2.add(Rs.getString("nom_etu"));
+                    v2.add(Rs.getString("filiere_etu"));
+                    v2.add(Rs.getString("nom_livre"));
+                    v2.add(Rs.getString("quantite_emprunt"));
+                    v2.add(Rs.getString("bibliothecaire"));
+                    v2.add(Rs.getString("date_debut"));
+                    v2.add(Rs.getString("date_fin"));
+
+                }
+                DFT.addRow(v2);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void show_models() {
@@ -117,6 +150,24 @@ public class Dash extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private int getQuantite(String nomLivre) {
+        int quantite = 0; // Initialiser à -1 pour indiquer que la catégorie n'a pas été trouvée
+        try {
+            Connexion con = new Connexion();
+            PreparedStatement pstmt = con.con.prepareStatement("SELECT quantite FROM livres WHERE nom = ?");
+            pstmt.setString(1, nomLivre);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                quantite = rs.getInt("quantite");
+            }
+            rs.close();
+            pstmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return quantite;
     }
 
     private int getIdCategorie(String nomCategorie) {
@@ -244,10 +295,15 @@ public class Dash extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jTextField6 = new javax.swing.JTextField();
+        txtLivre = new javax.swing.JTextField();
+        txtQuant = new javax.swing.JTextField();
+        btnValider = new javax.swing.JButton();
+        txtNameRetour = new javax.swing.JTextField();
+        txtBiblio = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -569,10 +625,7 @@ public class Dash extends javax.swing.JFrame {
         jTable5.setFont(new java.awt.Font("Calibri Light", 1, 12)); // NOI18N
         jTable5.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "id", "Nom", "Description", "Quantité", "Auteur", "Année"
@@ -602,20 +655,14 @@ public class Dash extends javax.swing.JFrame {
         if (jTable5.getColumnModel().getColumnCount() > 0) {
             jTable5.getColumnModel().getColumn(0).setResizable(false);
             jTable5.getColumnModel().getColumn(0).setPreferredWidth(5);
-            jTable5.getColumnModel().getColumn(0).setHeaderValue("id");
             jTable5.getColumnModel().getColumn(1).setResizable(false);
             jTable5.getColumnModel().getColumn(1).setPreferredWidth(12);
-            jTable5.getColumnModel().getColumn(1).setHeaderValue("Nom");
-            jTable5.getColumnModel().getColumn(2).setHeaderValue("Description");
             jTable5.getColumnModel().getColumn(3).setResizable(false);
             jTable5.getColumnModel().getColumn(3).setPreferredWidth(10);
-            jTable5.getColumnModel().getColumn(3).setHeaderValue("Quantité");
             jTable5.getColumnModel().getColumn(4).setResizable(false);
             jTable5.getColumnModel().getColumn(4).setPreferredWidth(15);
-            jTable5.getColumnModel().getColumn(4).setHeaderValue("Auteur");
             jTable5.getColumnModel().getColumn(5).setResizable(false);
             jTable5.getColumnModel().getColumn(5).setPreferredWidth(10);
-            jTable5.getColumnModel().getColumn(5).setHeaderValue("Année");
         }
 
         btnEnregisterEm.setText("Enregistrer");
@@ -638,9 +685,6 @@ public class Dash extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(174, 174, 174)
-                        .addComponent(jScrollPane5))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -690,11 +734,14 @@ public class Dash extends javax.swing.JFrame {
                             .addComponent(txtQuantDispo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtFiliereEtu, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(dateRet, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap(966, Short.MAX_VALUE)
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtQuantEmprunt, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtQuantEmprunt, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1014, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(54, 54, 54))
         );
         jPanel3Layout.setVerticalGroup(
@@ -734,8 +781,9 @@ public class Dash extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAnn)
                     .addComponent(btnEnregisterEm))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                .addGap(18, 18, 18))
         );
 
         tabbedPaneCustom1.addTab("Gestion Emprunt", jPanel3);
@@ -909,9 +957,7 @@ public class Dash extends javax.swing.JFrame {
         jTable1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Nom", "Rangée", "Description"
@@ -1022,59 +1068,113 @@ public class Dash extends javax.swing.JFrame {
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Num", "Nom Etudiant", "Filière", "Titre Livre", "Quantité", "Bibliothécaire", "Date Emprunt", "Date Retour"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable4MouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(jTable4);
+        if (jTable4.getColumnModel().getColumnCount() > 0) {
+            jTable4.getColumnModel().getColumn(0).setResizable(false);
+            jTable4.getColumnModel().getColumn(0).setPreferredWidth(3);
+            jTable4.getColumnModel().getColumn(4).setResizable(false);
+            jTable4.getColumnModel().getColumn(5).setResizable(false);
+        }
 
-        jButton1.setText("jButton1");
+        txtLivre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLivreActionPerformed(evt);
+            }
+        });
 
-        jTextField6.setText("jTextField6");
+        btnValider.setBackground(new java.awt.Color(51, 204, 0));
+        btnValider.setForeground(new java.awt.Color(255, 255, 255));
+        btnValider.setText("Valider");
+        btnValider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnValiderActionPerformed(evt);
+            }
+        });
 
-        jLabel19.setText("jLabel19");
+        jLabel19.setText("Nom Etudiant");
 
-        jTextField8.setText("jTextField8");
+        jLabel21.setText("Titre Livre");
+
+        jLabel22.setText("Quant.Emprunt");
+
+        jLabel23.setText("Bibliothécaire");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(txtNameRetour, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtLivre, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel22)
+                .addGap(18, 18, 18)
+                .addComponent(txtQuant, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel23)
+                .addGap(18, 18, 18)
+                .addComponent(txtBiblio, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnValider)
+                .addGap(137, 137, 137))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(jButton1)
-                .addGap(352, 352, 352))
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1027, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1027, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(btnValider))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtNameRetour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel21)
+                            .addComponent(txtLivre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtQuant, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel22)
+                            .addComponent(jLabel23)
+                            .addComponent(txtBiblio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         tabbedPaneCustom1.addTab("Gestion Retour", jPanel7);
@@ -1227,6 +1327,7 @@ public class Dash extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Livre ajouté avec succès");
 
                 showlivres();
+                showlivresEm();
                 txtName.setText("");
                 txtDescription1.setText("");
                 txtAuteur.setText("");
@@ -1406,9 +1507,8 @@ public class Dash extends javax.swing.JFrame {
         categorieLivre = txtCategorieLivre.getText();
         biblio = (String) comboNameBiblio.getSelectedItem();
         quantEmprun = txtQuantEmprunt.getText();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         dateEmp = sdf.format(dateEmprunt.getDate());
-        System.out.println(dateEmp);
         dateRetour = sdf.format(dateRet.getDate());
         if (nomEtu.equals("")) {
             JOptionPane.showMessageDialog(null, "Veuillez entrer le nom de l'étudiant");
@@ -1429,38 +1529,95 @@ public class Dash extends javax.swing.JFrame {
         } else if (dateRetour.equals("")) {
             JOptionPane.showMessageDialog(null, "Veuillez sélectionner une date emprunt");
         } else {
+            int dispo = Integer.parseInt(txtQuantDispo.getText());
+            int emprunt = Integer.parseInt(txtQuantEmprunt.getText());
+            int restant = dispo - emprunt;
+            if (dispo < emprunt) {
+                JOptionPane.showMessageDialog(dateEmprunt, "Quantité insuffisante", "", 0);
+            } else {
 
-            try {
-                Connexion con = new Connexion();
-                pst = con.con.prepareStatement("insert into emprunts (nom_etu, prenom_etu, filiere_etu, nom_livre, categorie_livre,bibliothecaire, quantite_emprunt,date_debut,date_fin) values (?, ?, ?, ?, ?, ?,?,?,?)");
+                try {
+                    Connexion con = new Connexion();
+                    pst = con.con.prepareStatement("insert into emprunts (nom_etu, prenom_etu, filiere_etu, nom_livre, categorie_livre,bibliothecaire, quantite_emprunt,date_debut,date_fin) values (?, ?, ?, ?, ?, ?,?,?,?)");
+                    int id = jTable5.getSelectedRow();
+                    pst.setString(1, nomEtu);
+                    pst.setString(2, prenomEtu);
+                    pst.setString(3, filiereEtu);
+                    pst.setString(4, nomLivre);
+                    pst.setString(5, categorieLivre);
+                    pst.setString(6, biblio);
+                    pst.setString(7, quantEmprun);
+                    pst.setString(8, dateEmp);
+                    pst.setString(9, dateRetour);
+                    pst.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Emprunt ajouté avec succès");
+                    pst = con.con.prepareStatement("update livres set quantite = ? where id_livre =?");
+                    pst.setInt(1, restant);
+                    pst.setInt(2, id);
+                    pst.executeUpdate();
+                    showlivresEm();
+                    showHistoriqueEmp();
+                    txtNomEtu.setText("");
+                    txtPenomEtu.setText("");
+                    txtFiliereEtu.setText("");
+                    txtNomLivre.setText("");
+                    txtCategorieLivre.setText("");
+                    comboNameBiblio.getSelectedItem();
+                    txtQuantDispo.setText("");
+                    txtQuantEmprunt.setText("");
+                    dateEmprunt.setDate(null);
+                    dateRet.setDate(null);
 
-                pst.setString(1, nomEtu);
-                pst.setString(2, prenomEtu);
-                pst.setString(3, filiereEtu);
-                pst.setString(4, nomLivre);
-                pst.setString(5, categorieLivre);
-                pst.setString(6, biblio);
-                pst.setString(7, quantEmprun);
-                pst.setString(8, dateEmp);
-                pst.setString(9, dateRetour);
-                pst.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Emprunt ajouté avec succès");
-
-                //showlivres();
-                txtNomEtu.setText("");
-                txtPenomEtu.setText("");
-                txtFiliereEtu.setText("");
-                txtNomLivre.setText("");
-                txtCategorieLivre.setText("");
-                comboNameBiblio.getSelectedItem();
-                txtQuantEmprunt.setText("");
-                dateEmprunt.setDate(null);
-                dateRet.setDate(null);
-            } catch (SQLException ex) {
-                Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }//GEN-LAST:event_btnEnregisterEmActionPerformed
+
+    private void jTable4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable4MouseClicked
+
+        DefaultTableModel model = (DefaultTableModel) jTable4.getModel();
+        int selectedIndex = jTable4.getSelectedRow();
+        txtNameRetour.setText(model.getValueAt(selectedIndex, 1).toString());
+        txtLivre.setText(model.getValueAt(selectedIndex, 3).toString());
+        txtQuant.setText(model.getValueAt(selectedIndex, 4).toString());
+        txtBiblio.setText(model.getValueAt(selectedIndex, 5).toString());
+
+    }//GEN-LAST:event_jTable4MouseClicked
+
+    private void txtLivreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLivreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLivreActionPerformed
+
+    private void btnValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValiderActionPerformed
+        try {
+            String nom = txtLivre.getText();
+            Connexion con = new Connexion();
+            pst = con.con.prepareStatement("update emprunts set etat = ? where nom_livre =?");
+            pst.setInt(1, 1);
+            pst.setString(2, nom);
+            pst.executeUpdate();
+            String quantiteStr = txtLivre.getText();
+
+            int emprunt = Integer.parseInt(txtQuant.getText());
+            int qua = getQuantite(quantiteStr) + emprunt;
+            pst = con.con.prepareStatement("update livres set quantite = ? where nom =?");
+            pst.setInt(1, qua);
+            pst.setString(2, quantiteStr);
+            pst.executeUpdate();
+            showlivresEm();
+            showHistoriqueEmp();
+            JOptionPane.showMessageDialog(null, "Retour validé avec succès");
+            txtNameRetour.setText("");
+            txtLivre.setText("");
+            txtQuant.setText("");
+            txtBiblio.setText("");
+        } catch (SQLException ex) {
+            Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+    }//GEN-LAST:event_btnValiderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1506,6 +1663,7 @@ public class Dash extends javax.swing.JFrame {
     private javax.swing.JButton btnModifier;
     private javax.swing.JButton btnRechercher;
     private javax.swing.JButton btnSupprimer1;
+    private javax.swing.JButton btnValider;
     private javax.swing.JButton btn_Retour;
     private javax.swing.JButton btn_Supprimer;
     private javax.swing.JComboBox<String> cboRangee;
@@ -1513,7 +1671,6 @@ public class Dash extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboNameBiblio;
     private com.toedter.calendar.JDateChooser dateEmprunt;
     private com.toedter.calendar.JDateChooser dateRet;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1527,6 +1684,9 @@ public class Dash extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1556,20 +1716,22 @@ public class Dash extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField8;
     private raven.tabbed.TabbedPaneCustom tabbedPaneCustom1;
     private javax.swing.JTextField txtAnnee;
     private javax.swing.JTextField txtAuteur;
+    private javax.swing.JTextField txtBiblio;
     private javax.swing.JTextField txtCategorieLivre;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtDescription1;
     private javax.swing.JTextField txtFiliereEtu;
+    private javax.swing.JTextField txtLivre;
     private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtNameRetour;
     private javax.swing.JTextField txtNom;
     private javax.swing.JTextField txtNomEtu;
     private javax.swing.JTextField txtNomLivre;
     private javax.swing.JTextField txtPenomEtu;
+    private javax.swing.JTextField txtQuant;
     private javax.swing.JTextField txtQuantDispo;
     private javax.swing.JTextField txtQuantEmprunt;
     private javax.swing.JTextField txtQuantite;
