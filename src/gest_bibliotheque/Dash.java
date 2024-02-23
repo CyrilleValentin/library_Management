@@ -19,6 +19,12 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.Color;
+import java.awt.Component;
+import java.text.ParseException;
+import java.util.Date;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -44,36 +50,43 @@ public class Dash extends javax.swing.JFrame {
 
     }
 
-    private void showHistoriqueEmp() {
-        int CC;
-
-        try {
-            Connexion con = new Connexion();
-            pst = con.con.prepareStatement("SELECT *FROM emprunts where etat=false");
-            ResultSet Rs = pst.executeQuery();
-            ResultSetMetaData RSMD = Rs.getMetaData();
-            CC = RSMD.getColumnCount();
-            DefaultTableModel DFT = (DefaultTableModel) jTable4.getModel();
-            DFT.setRowCount(0);
-            while (Rs.next()) {
-                Vector v2 = new Vector();
-                for (int i = 0; i <= CC; i++) {
-                    v2.add(Rs.getString("id_emprunt"));
-                    v2.add(Rs.getString("nom_etu"));
-                    v2.add(Rs.getString("filiere_etu"));
-                    v2.add(Rs.getString("nom_livre"));
-                    v2.add(Rs.getString("quantite_emprunt"));
-                    v2.add(Rs.getString("bibliothecaire"));
-                    v2.add(Rs.getString("date_debut"));
-                    v2.add(Rs.getString("date_fin"));
-
-                }
+   private void showHistoriqueEmp() {
+    try {
+        Connexion con = new Connexion();
+        pst = con.con.prepareStatement("SELECT * FROM emprunts WHERE etat = false");
+        ResultSet Rs = pst.executeQuery();
+        DefaultTableModel DFT = (DefaultTableModel) jTable4.getModel();
+        DFT.setRowCount(0);
+        while (Rs.next()) {
+            Vector<String> v2 = new Vector<>();
+            v2.add(Rs.getString("id_emprunt"));
+            v2.add(Rs.getString("nom_etu"));
+            v2.add(Rs.getString("filiere_etu"));
+            v2.add(Rs.getString("nom_livre"));
+            v2.add(Rs.getString("quantite_emprunt"));
+            v2.add(Rs.getString("bibliothecaire"));
+            v2.add(Rs.getString("date_debut"));
+            v2.add(Rs.getString("date_fin"));
+            // Vérifier si la date de fin de l'emprunt est dépassée
+            String dateFinStr = Rs.getString("date_fin");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateFin = sdf.parse(dateFinStr);
+            Date currentDate = new Date();
+            if (currentDate.after(dateFin)) {
+                // Si la date est dépassée, définir la couleur de fond de la ligne en rouge
                 DFT.addRow(v2);
+                jTable4.setSelectionBackground(Color.RED);
+            } else {
+                // Sinon, la date n'est pas dépassée, définir la couleur de fond de la ligne en vert
+                DFT.addRow(v2);
+                jTable4.setSelectionBackground(Color.GREEN);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
         }
+    } catch (SQLException | ParseException ex) {
+        Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
     }
+}
+
 
     private void show_models() {
 

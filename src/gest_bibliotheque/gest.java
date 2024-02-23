@@ -15,8 +15,8 @@ public class gest {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-      Dash main=new Dash();
-     
+   
+    
     }
     
 }
